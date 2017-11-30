@@ -17,7 +17,7 @@ package com.sinosoft.one.data.jade.context;
 
 import com.sinosoft.one.data.jade.annotation.DAO;
 import com.sinosoft.one.data.jade.annotation.SQLType;
-import com.sinosoft.one.data.jade.context.spring.SpringInterpreterFactory;
+import com.sinosoft.one.data.jade.context.spring.OneDataSpringApplicationContext;
 import com.sinosoft.one.data.jade.dataaccess.procedure.OutProcedureResult;
 import com.sinosoft.one.data.jade.dataaccess.procedure.ProcedureResult;
 import com.sinosoft.one.data.jade.dataaccess.procedure.ResultSetProcedureResult;
@@ -54,12 +54,11 @@ public class JadeInvocationHandler implements InvocationHandler {
 
   private InterpreterFactory interpreterFactory;
 
-  private static final String[] INDEX_NAMES = new String[]{"?1", "?2", "?3", "?4", "?5", "?6",
-                                                           "?7", "?8", "?9", "?10", "?11", "?12",
-                                                           "?13", "?14", "?15", "?16", "?17", "?18",
-                                                           "?19",
-                                                           "?20", "?21", "?22", "?23", "?24", "?25",
-                                                           "?26", "?27", "?28", "?29", "?30",};
+  private static final String[] INDEX_NAMES = new String[]{
+      "?1", "?2", "?3", "?4", "?5", "?6", "?7", "?8", "?9", "?10",
+      "?11", "?12", "?13", "?14", "?15", "?16", "?17", "?18", "?19", "?20",
+      "?21", "?22", "?23", "?24", "?25", "?26", "?27", "?28", "?29", "?30"
+  };
 
   public JadeInvocationHandler(Method method, EntityManager em) {
     this.daoMetaData = new DAOMetaData(method.getDeclaringClass());
@@ -69,7 +68,7 @@ public class JadeInvocationHandler implements InvocationHandler {
 
   private InterpreterFactory getInterpreterFactory(){
     if (interpreterFactory == null){
-      interpreterFactory = SpringInterpreterFactory.instance;
+      interpreterFactory = OneDataSpringApplicationContext.interpreterFactory;
     }
     if (interpreterFactory == null){
       interpreterFactory = new DefaultInterpreterFactory();

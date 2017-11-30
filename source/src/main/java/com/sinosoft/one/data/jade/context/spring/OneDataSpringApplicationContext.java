@@ -29,40 +29,21 @@ import java.util.Map;
  * @author qieqie
  * 
  */
-public class SpringInterpreterFactory implements InterpreterFactory, ApplicationContextAware {
+public class OneDataSpringApplicationContext implements ApplicationContextAware {
 
-    public static SpringInterpreterFactory instance;
-
-    private DefaultInterpreterFactory interpreterFactory;
+    public static InterpreterFactory interpreterFactory ;
 
     private ApplicationContext beanFactory;
 
-    public SpringInterpreterFactory() {
-        this.instance = this;
-    }
-
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.beanFactory = applicationContext;
-    }
-
-
-    public Interpreter[] getInterpreters(StatementMetaData metaData) {
-        if (interpreterFactory == null) {
-            init();
-        }
-        return interpreterFactory.getInterpreters(metaData);
+        init();
     }
 
     private void init() {
-        synchronized (this) {
-            if (interpreterFactory == null) {
-                @SuppressWarnings("unchecked")
-                Map<String, Interpreter> map = beanFactory.getBeansOfType(Interpreter.class);
-                ArrayList<Interpreter> interpreters = new ArrayList<Interpreter>(map.values());
-                Collections.sort(interpreters, new InterpreterComparator());
-                interpreterFactory = new DefaultInterpreterFactory(interpreters);
-            }
-        }
+        Map<String, Interpreter> map = beanFactory.getBeansOfType(Interpreter.class);
+        ArrayList<Interpreter> interpreters = new ArrayList<Interpreter>(map.values());
+        Collections.sort(interpreters, new InterpreterComparator());
+        interpreterFactory = new DefaultInterpreterFactory(interpreters);
     }
-
 }
